@@ -98,101 +98,143 @@ const Sidebar = () => {
     //   </div>
     // </div>
     <div
-      className={`bg-gradient-to-b from-teal-500 via-cyan-600 to-blue-800 h-full p-5 rounded-r-3xl overflow-y-scroll text-white shadow-xl transition-all duration-300 ${
+      className={`relative h-full p-[3px] rounded-3xl overflow-hidden ${
         selectedUSer ? "max-md:hidden" : ""
       }`}
     >
-      {/* Logo & Menu */}
-      <div className="pb-5">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
+      {/* Animated Border for Whole Sidebar */}
+      <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 animate-border"></div>
+
+      {/* Sidebar Content */}
+      <div
+        className="relative bg-gradient-to-b from-[#1E1B3A] to-[#2C2B4B] backdrop-blur-lg 
+      h-full p-5 rounded-3xl overflow-y-scroll text-white shadow-lg z-10"
+      >
+        {/* Top Section: Logo and Menu */}
+        <div className="pb-5">
+          <div className="flex justify-between items-center">
+            {/* Logo */}
             <img
               src="yoyo-logo.png"
               alt="logo"
-              className="w-10 rounded-full shadow-lg"
+              className="w-12 h-12 object-contain rounded-full shadow-md"
             />
-            <p className="text-lg font-bold tracking-wide">YoYo</p>
-          </div>
 
-          {/* Menu Dropdown */}
-          <div className="relative py-2 group">
-            <img
-              src={assets.menu_icon}
-              alt="Menu"
-              className="w-6 h-6 cursor-pointer hover:scale-105 transition-transform duration-200"
-            />
-            <div className="absolute top-full right-0 mt-2 z-20 w-36 p-4 rounded-xl bg-gray-900/90 backdrop-blur-lg border border-gray-700 text-gray-100 hidden group-hover:block shadow-md">
-              <p
-                onClick={() => navigate("/profile")}
-                className="cursor-pointer text-sm hover:text-blue-400 transition-colors duration-200"
+            {/* Menu Dropdown */}
+            <div className="relative py-2 group">
+              <img
+                src={assets.menu_icon}
+                alt="Menu"
+                className="w-6 cursor-pointer hover:scale-110 transition-transform"
+              />
+              <div
+                className="absolute top-full right-0 z-20 w-36 p-3 rounded-lg 
+              bg-[#2F2B48]/90 border border-gray-700 shadow-xl hidden group-hover:block"
               >
-                Edit Profile
-              </p>
-              <hr className="my-2 border-gray-600" />
-              <p
-                onClick={() => logout()}
-                className="cursor-pointer text-sm hover:text-red-400 transition-colors duration-200"
-              >
-                Logout
-              </p>
+                <p
+                  onClick={() => navigate("/profile")}
+                  className="cursor-pointer text-sm hover:text-blue-400 transition-colors"
+                >
+                  Edit Profile
+                </p>
+                <hr className="my-2 border-gray-600" />
+                <p
+                  onClick={() => logout()}
+                  className="cursor-pointer text-sm hover:text-red-400 transition-colors"
+                >
+                  Logout
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Search Bar */}
-        <div className="bg-gray-900/80 rounded-full flex items-center gap-3 py-3 px-4 mt-5 border border-gray-700 shadow-inner">
-          <img
-            src={assets.search_icon}
-            alt="Search"
-            className="w-4 opacity-80"
-          />
-          <input
-            type="text"
-            onChange={(e) => setinput(e.target.value)}
-            className="bg-transparent border-none outline-none text-white text-sm placeholder-gray-400 flex-1"
-            placeholder="Search User"
-          />
-        </div>
-      </div>
-
-      {/* User List */}
-      <div className="flex flex-col space-y-3">
-        {filterUsers.map((user, index) => (
+          {/* Search Bar */}
           <div
-            key={index}
-            onClick={() => setselectedUser(user)}
-            className={`relative flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-300 
-          ${
-            selectedUSer?._id === user._id
-              ? "bg-blue-700/60 shadow-lg scale-[1.02]"
-              : "hover:bg-gray-900/30"
-          }`}
+            className="bg-[#2F2B48] mt-6 rounded-full flex items-center gap-3 px-4 py-3 
+          shadow-inner border border-gray-700 focus-within:ring-2 focus-within:ring-blue-500 transition-all"
           >
-            {/* Avatar */}
             <img
-              src={user?.profilePic || assets.avatar_icon}
-              alt=""
-              className="w-10 h-10 rounded-full border border-gray-300 shadow-sm"
+              src={assets.search_icon}
+              alt="Search"
+              className="w-4 opacity-70"
             />
-
-            {/* Name & Status */}
-            <div className="flex flex-col leading-5">
-              <p className="text-gray-100 font-medium">{user.fullname}</p>
-              {onlineUser.includes(user._id.toString()) ? (
-                <span className="text-green-400 text-xs">Online</span>
-              ) : (
-                <span className="text-red-400 text-xs">Offline</span>
-              )}
-            </div>
-
-            {/* Unread Messages Badge */}
-            {unseenMsg[user._id] > 0 && (
-              <span className="absolute top-2 right-3 text-xs h-6 w-6 flex justify-center items-center rounded-full bg-blue-400 text-blue-900 font-bold shadow-md">
-                {unseenMsg[user._id]}
-              </span>
-            )}
+            <input
+              type="text"
+              onChange={(e) => setinput(e.target.value)}
+              className="bg-transparent border-none outline-none text-sm text-white 
+            placeholder-gray-400 flex-1"
+              placeholder="Search User..."
+            />
           </div>
-        ))}
+        </div>
+
+        {/* User List */}
+        <div className="flex flex-col mt-4 gap-3">
+          {filterUsers.map((user, index) => (
+            <div
+              key={index}
+              onClick={() => setselectedUser(user)}
+              className={`relative p-[2px] rounded-xl transition-transform duration-300 ease-in-out cursor-pointer
+            ${
+              selectedUSer?._id === user._id
+                ? "scale-[1.02]"
+                : "hover:scale-[1.01]"
+            }`}
+            >
+              {/* Animated Border for Each Chat */}
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 animate-border"></div>
+
+              {/* Chat Content */}
+              <div
+                className={`relative flex items-center gap-3 px-4 py-3 rounded-xl bg-[#2F2B48] 
+              ${
+                selectedUSer?._id === user._id
+                  ? "bg-opacity-90 shadow-lg"
+                  : "bg-opacity-70"
+              }`}
+              >
+                {/* Profile Picture */}
+                <div className="relative">
+                  <img
+                    src={user?.profilePic || assets.avatar_icon}
+                    alt=""
+                    className="w-[40px] h-[40px] rounded-full object-cover shadow-md border border-gray-700"
+                  />
+                  {/* Online Indicator */}
+                  {onlineUser.includes(user._id.toString()) && (
+                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border border-gray-800 rounded-full"></span>
+                  )}
+                </div>
+
+                {/* User Info */}
+                <div className="flex flex-col leading-5">
+                  <p className="font-medium text-gray-100">{user.fullname}</p>
+                  <span
+                    className={`text-xs ${
+                      onlineUser.includes(user._id.toString())
+                        ? "text-green-400"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {onlineUser.includes(user._id.toString())
+                      ? "Online"
+                      : "Offline"}
+                  </span>
+                </div>
+
+                {/* Unseen Message Badge */}
+                {unseenMsg[user._id] > 0 && (
+                  <p
+                    className="absolute top-3 right-4 text-xs h-6 w-6 flex justify-center items-center 
+                rounded-full bg-red-500 text-white font-semibold shadow-md"
+                  >
+                    {unseenMsg[user._id]}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
